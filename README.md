@@ -26,7 +26,7 @@ First off, you'll need to do some pre-deploy setup.  That's all detailed [here](
 
 Initialize them in  `terraform.tfvars` file and populate with the following information:
 
-
+```
 # Authentication
 tenancy_ocid         = <"">
 user_ocid            = <"">
@@ -42,6 +42,8 @@ region = "us-ashburn-1"
 # Compartment
 compartment_ocid = <"">    (Compartment without Security Zones enabled)
 compartment_SZ_ocid = <""> (Compartment with Security Zones enabled)
+
+````
 
 NOTE: There are other variables that are assigned default value such as VCN CIDR and others. These can be changed in variables.tf file
 
