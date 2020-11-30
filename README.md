@@ -71,4 +71,4 @@ When you no longer need the deployment, you can run this command to destroy it:
 
 ## Reference Architecture
 
-- [Deploy the Spring Boot framework on Oracle Cloud Infrastructure with MySQL Database Service] (https://docs.oracle.com/en/solutions/springboot-mysql-oci/)
+- [Deploy the Spring Boot framework on Oracle Cloud Infrastructure with MySQL Database Service](https://docs.oracle.com/en/solutions/springboot-mysql-oci/)
