@@ -1,0 +1,187 @@
+## Copyright © 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
+    title: "Spring Boot framework with MySQL Database Service"
+    stackDescription: Deploy Spring Boot framework with MySQL Database Service
+    schemaVersion: 1.1.0
+    version: "20190404"
+    locale: "en"
+
+    variableGroups:
+    - title: General Configuration
+      visible: false
+      variables:
+      - compartment_Non_Security_Zone_ocid
+      - compartment_Security_Zone_ocid
+      - tenancy_ocid
+      - region
+      - instance_os
+
+    - title: Required Configuration
+      visible: true  
+      variables:
+     ### - ssh_public_key
+      - igw_display_name
+      - vcn01_display_name
+      - vcn01_dns_label
+      - vcn01_cidr_block
+      - vcn01_subnet_pub01_cidr_block
+      - vcn01_subnet_pub01_display_name
+      - vcn01_subnet_pub02_cidr_block
+      - vcn01_subnet_app01_cidr_block
+      - vcn02_subnet_pub01_cidr_block
+      - vcn02_subnet_pub02_cidr_bloc
+      - vcn02_subnet_db01_cidr_block
+      - vcn02_display_name
+      - vcn02_cidr_block
+      - vcn02_dns_label
+      - mysql_db_system_admin_password 
+      - mysql_db_system_admin_username
+
+
+    - title: Optional Configuration
+      visible: true
+      variables:      
+      - linux_os_version
+      - InstanceShape
+    
+    variables:
+
+      compartment_Non_Security_Zone_ocid:
+        type: oci:identity:compartment:id
+        required: true
+        title: Compartment
+        description: Compartment where you want to create the Virtual Machines
+      compartmen_SZ_ocid:
+        type: oci:identity:compartment:id
+        required: true
+        title: Compartment
+        description: Security Zone Compartment where you want to create MySQL
+
+      region:
+        type: oci:identity:region:name
+        required: true
+        title: Region
+        description: Region where you want to deploy the resources defined by this stack
+
+      ssh_public_key:
+        type: oci:core:ssh:publickey
+        required: true
+        title: SSH public Key (Type 'id_rsa.pub')
+        description: Public key
+
+      igw_display_name:
+        type: string
+        required: true
+        title: IGW Name
+        description: Display name of the Internet Gateway from the  VCN
+
+      vcn01_cidr_block:
+        type: string
+        required: true
+        title: Non Secuirty zone VCN CIDR Block
+        description: CIDR block that will be assigned to the  VCN
+
+     vcn01_dns_label:
+        type: string
+        required: true
+        title: DNS Label of Non Secuirty zone VCN
+        description: DNS label that will be asigned to the VCN
+
+      vcn01_display_name:
+        type: string
+        required: true
+        title: VNC Name
+        description: Display name assigned to Non Secuirty zone VCN
+
+
+        vcn01_subnet_pub01_cidr_block:
+        type: string
+        required: true
+        title: vcn01_subnet_pub01_cidr_block
+        description: Non Secuirty Zone CIDR block of subnet
+        
+        vcn01_subnet_pub02_cidr_block:
+        type: string
+        required: true
+        title: vcn01_subnet_pub02_cidr_block
+        description: Non Secuirty Zone CIDR block of subnet
+
+      vcn01_subnet_app01_cidr_block:
+        type: string
+        required: true
+        title: vcn01_subnet_app01_cidr_block
+        description: Non Secuirty Zone CIDR block of subnet
+      
+  vcn02_cidr_block:
+        type: string
+        required: true
+        title: Non Secuirty zone VCN CIDR Block
+        description: CIDR block that will be assigned to the  VCN
+
+     vcn02_dns_label:
+        type: string
+        required: true
+        title: DNS Label of Non Secuirty zone VCN
+        description: DNS label that will be asigned to the VCN
+
+      vcn02_display_name:
+        type: string
+        required: true
+        title: VNC Name
+        description: Display name assigned to Non Secuirty zone VCN
+
+      vcn02_subnet_db01_cidr_block:
+        type: string
+        required: true
+        title: vcn02_subnet_db01_cidr_block
+        description: Secuirty Zone CIDR block of subnet
+
+   mysql_db_system_admin_username:
+        type: string
+        required: true
+        title: MySQL Admin User name
+        description: MySQL Admin user name
+
+      mysql_db_system_admin_password:
+        type: password
+        required: true
+        title: "MySQL Database Password"
+        description: "MySQL atabase Password for ADMIN user."
+        minLength: 12
+        maxLength: 30
+        pattern: ^[A-Za-z][A-Za-z0-9_#\$]+$ 
+
+      
+     instance_shape:
+          type: oci:core:instanceshape:name
+          required: false
+          title: Instance Shape
+          description: A shape is a template that determines the number of CPUs, amount of memory, and other resources allocated to Bastion instance.
+          default: "VM.Standard.E2.1.Micro"
+          dependsOn:
+            compartmentId: ${compartment_Non_Security_Zone_ocid}
+
+     InstanceShape:
+          type: oci:core:instanceshape:name
+          required: false
+          title: Instance Shape
+          description: A shape is a template that determines the number of CPUs, amount of memory, and other resources allocated to Bastion instance.
+          default: "VM.Standard.E2.1.Micro"
+          dependsOn:
+            compartmentId: ${compartment_Non_Security_Zone_ocid}
+
+      instance_os:
+        type: enum
+        title: "Image OS"
+        description: "The OS/image installed on the Bastion instance."
+        enum:
+          - "Oracle Linux - Latest Image"
+        required: false
+
+         outputs:
+      generated_ssh_private_key:
+        title: "Generated SSH Private Key"
+        displayText: "Generated SSH Private Key"
+        type: string
+        visible: true
