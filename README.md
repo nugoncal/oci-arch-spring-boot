@@ -1,8 +1,10 @@
 # oci-arch-app-mds
 
 MySQL Database service is a managed Database service on Oracle Cloud Infrastructure. In this deployment we will deploy 3 node cluster(app server) along with a Load Balancer and MySQL Database service.
-##  These app server can then be installed with an application such as mypetclinic (https://projects.spring.io/spring-petclinic/), and configured to work with MySQL.
-## For more information please refer to https://github.com/spring-projects/spring-petclinic
+
+These app servers can then be installed with an application such as mypetclinic (https://projects.spring.io/spring-petclinic/), and configured to work with MySQL.
+
+For more information please refer to https://github.com/spring-projects/spring-petclinic
 
 ## Terraform Provider for Oracle Cloud Infrastructure
 The OCI Terraform Provider is now available for automatic download through the Terraform Provider Registry. 
@@ -24,7 +26,7 @@ If you don't have the required permissions and quota, contact your tenancy admin
 
 ## Deploy Using Oracle Resource Manager
 
-1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://console.us-phoenix-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-arch-spring-boot/raw/master/resource-manager/Springboot.zip)
+1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://console.us-ashburn-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-arch-spring-boot/tree/main/Resource-ManagerSpringboot.zip)
 
 If you aren't already signed in, when prompted, enter the tenancy and user credentials.
 
