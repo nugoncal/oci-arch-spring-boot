@@ -24,12 +24,11 @@ and [setup guide](https://www.terraform.io/docs/providers/oci/guides/version-3-u
 
 If you don't have the required permissions and quota, contact your tenancy administrator. See [Policy Reference](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Reference/policyreference.htm), [Service Limits](https://docs.cloud.oracle.com/en-us/iaas/Content/General/Concepts/servicelimits.htm), [Compartment Quotas](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcequotas.htm)
 
-- OCID of compartments with Security Zone and without security zone enabled
+- OCID of compartments with Security Zone and without Security Zone enabled
 
 ## Deploy Using Oracle Resource Manager
 
 1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://console.us-ashburn-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-arch-spring-boot/raw/main/Resource-Manager/oci-arch-springboot.zip)
-
 
 
 If you aren't already signed in, when prompted, enter the tenancy and user credentials.
