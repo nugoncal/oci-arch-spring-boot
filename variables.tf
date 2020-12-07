@@ -9,10 +9,10 @@ variable "region" {}
 variable "region02" {}
 variable "compartment_ocid" {}
 variable "compartment_SZ_ocid" {}
-variable "ssh_public_key" {}
 variable "user_ocid" {}
-variable  "fingerprint" {}
+variable "fingerprint" {}
 variable "private_key_path"{}
+
 variable "cloud_guard_configuration_status" {
   default = "ENABLED"
 }
@@ -23,7 +23,6 @@ variable "target1_display_name" {
 variable "target2_display_name" {
   default = "SZ"
 }
-
 
 variable "detector_recipe1_display_name" {
   default = "test1-detector"

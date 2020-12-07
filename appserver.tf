@@ -29,8 +29,8 @@ resource "oci_core_instance" "webserver1" {
 
   metadata = {
     ###ssh_authorized_keys = var.ssh_public_key
-     ssh_authorized_keys = chomp(file(var.ssh_public_key))
-      user_data = "${base64encode(file("CloudInit.sh"))}"
+     ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+     user_data = "${base64encode(file("CloudInit.sh"))}"
     ###user_data = data.template_cloudinit_config.app_server_cloud_init.rendered
   }
   # timeouts {
