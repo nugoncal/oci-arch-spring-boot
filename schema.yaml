@@ -11,8 +11,8 @@ variableGroups:
 - title: General Configuration
   visible: false
   variables:
-  - compartment_Non_Security_Zone_ocid
-  - compartment_Security_Zone_ocid
+  - compartment_ocid
+  - compartment_SZ_ocid
   - tenancy_ocid
   - region
   - instance_os
@@ -20,6 +20,8 @@ variableGroups:
 - title: Required Configuration
   visible: true  
   variables:
+  - linux_os_version
+  - InstanceShape
   - igw_display_name
   - vcn01_display_name
   - vcn01_dns_label
@@ -35,28 +37,20 @@ variableGroups:
   - vcn02_cidr_block
   - vcn02_dns_label
   - mysql_db_system_admin_password 
-  - mysql_db_system_admin_username
+  - mysql_db_system_admin_username 
 
-
-- title: Optional Configuration
-  visible: true
-  variables:  
-  - linux_os_version
-  - InstanceShape
-    
 variables:
 
-  # General Configuration
-  compartment_Non_Security_Zone_ocid:
+  compartment_ocid:
     type: oci:identity:compartment:id
     required: true
-    title: Compartment
+    title: "Compartment (Non Security Zone)"
     description: "Compartment where you want to create the Virtual Machines."
   
-  compartment_Security_Zone_ocid:
+  compartment_SZ_ocid:
     type: oci:identity:compartment:id
     required: true
-    title: Compartment
+    title: "Compartment (Security Zone)"
     description: "Security Zone Compartment where you want to create MySQL."
 
   region:
@@ -153,7 +147,7 @@ variables:
     description: A shape is a template that determines the number of CPUs, amount of memory, and other resources allocated to Bastion instance.
     default: "VM.Standard.E2.1.Micro"
     dependsOn:
-      compartmentId: ${compartment_Non_Security_Zone_ocid}
+      compartmentId: ${compartment_ocid}
 
   instance_os:
     type: enum
