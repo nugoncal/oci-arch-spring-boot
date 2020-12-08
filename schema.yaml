@@ -62,6 +62,7 @@ variableGroups:
   - detector_recipe2_description
   - responder_recipe2_display_name
   - responder_recipe2_description
+  - responder_recipe_state
   - detector_recipe_access_level
   - detector_recipe_compartment_id_in_subtree
   - detector_recipe_defined_tags_value
@@ -73,6 +74,9 @@ variableGroups:
   - detector_recipe_detector_rules_details_is_enabled
   - detector_recipe_detector_rules_details_labels
   - detector_recipe_detector_rules_details_risk_level
+  - detector_recipe_detector_rules_details_configurations_config_key
+  - detector_recipe_detector_rules_details_configurations_name
+  - detector_recipe_detector_rules_details_configurations_values_managed_list_type
   - detector_recipe_freeform_tags 
   - detector_recipe_state
   - target_description
@@ -80,7 +84,8 @@ variableGroups:
   - target_state
   - target_target_resource_type
   - target_target_detector_recipes_detector_rules_details_condition_groups_condition
-  - responder_recipe_responder_rules_details_is_enabled  
+  - target_target_responder_recipes_responder_rules_details_mode
+  - responder_recipe_responder_rules_details_is_enabled 
 
 variables:
 
@@ -346,6 +351,15 @@ variables:
     title: "Cloud Guard Responder Recipe1 description"
     description: "Type Cloud Guard Responder Recipe1 description."
 
+  responder_recipe_state:
+    type: enum
+    default: "ACTIVE"
+    title: "Cloud Guard Responder Recipce State"
+    description: "Choose Cloud Guard Responder Recipce State."
+    required: false
+    enum:
+      - "ACTIVE"
+
   detector_recipe2_display_name:
     type: string
     required: false
@@ -372,6 +386,7 @@ variables:
 
   detector_recipe_access_level:
     type: enum
+    default: "ACCESSIBLE"
     title: "Cloud Guard Detector Recipe Access Level"
     description: "Choose Cloud Guard Detector Recipe Access Level."
     required: false
@@ -443,6 +458,24 @@ variables:
     description: "Choose Cloud Guard Detector Recipe Detector Rules Details Risk Level."
     enum:
       - "HIGH"
+  
+  detector_recipe_detector_rules_details_configurations_config_key:
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Detector Rules Details Configurations Config Key"
+    description: "Type Cloud Guard Detector Recipe Detector Rules Details Configurations Config Key."  
+
+  detector_recipe_detector_rules_details_configurations_name:
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Detector Rules Details Configurations Name"
+    description: "Type Cloud Guard Detector Recipe Detector Rules Details Configurations Name."  
+
+  detector_recipe_detector_rules_details_configurations_values_managed_list_type:
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Detector Rules Details Configurations Values Managed List Type"
+    description: "Type Cloud Guard Detector Recipe Detector Rules Details Configurations Values Managed List Type." 
 
   detector_recipe_freeform_tags:   
     type: string
@@ -494,6 +527,14 @@ variables:
     required: false
     title: "Cloud Guard Target Detector Recipes Detector Rules Details Condition Group Condition"
     description: "Type Cloud Guard Target Detector Recipes Detector Rules Details Condition Group Condition."  
+
+  target_target_responder_recipes_responder_rules_details_mode:
+    type: enum
+    required: false
+    title: "Cloud Guard Target Target Responder Recipes Responder Rules Details Mode"
+    description: "Choose Cloud Guard Target Target Responder Recipes Responder Rules Details Mode."  
+    enum:
+      - "AUTOACTION"
 
   responder_recipe_responder_rules_details_is_enabled:
     type: enum
