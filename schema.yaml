@@ -137,10 +137,7 @@ variables:
     type: password
     required: true
     title: "MySQL Database Password"
-    description: "Type MySQL atabase Password for ADMIN user."
-    minLength: 12
-    maxLength: 30
-    pattern: ^[A-Za-z][A-Za-z0-9_#\$]+$ 
+    description: "Type MySQL Database Password for ADMIN user."
 
   # Optional Configuration
 
