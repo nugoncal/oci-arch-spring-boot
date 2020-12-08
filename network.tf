@@ -343,10 +343,10 @@ resource "oci_cloud_guard_responder_recipe" "cloned2_responder_recipe" {
 
 
 resource "oci_cloud_guard_target" "test_target" {
-    #Required
-    compartment_id = var.compartment_ocid
-     display_name = var.target1_display_name
-    target_resource_id = var.compartment_ocid
+  #Required
+  compartment_id = var.compartment_ocid
+  display_name = var.target1_display_name
+  target_resource_id = var.compartment_ocid
 
   target_resource_type = var.target_target_resource_type
   description   = var.target_description
@@ -363,13 +363,13 @@ resource "oci_cloud_guard_target" "test_target" {
 }
 
 resource "oci_cloud_guard_target" "test_target2" {
-    #Required
-    compartment_id = var.compartment_SZ_ocid
-   display_name = var.target2_display_name
+  #Required
+  compartment_id = var.compartment_SZ_ocid
+  display_name = var.target2_display_name
 
-target_resource_id = var.compartment_SZ_ocid
-   target_resource_type = var.target_target_resource_type
-description   = var.target_description
+  target_resource_id = var.compartment_SZ_ocid
+  target_resource_type = var.target_target_resource_type
+  description   = var.target_description
   state         = var.target_state
 
   target_detector_recipes {

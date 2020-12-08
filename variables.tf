@@ -6,7 +6,6 @@
 
 variable "tenancy_ocid" {}
 variable "region" {}
-variable "region02" {}
 variable "compartment_ocid" {}
 variable "compartment_SZ_ocid" {}
 variable "user_ocid" {}
@@ -39,6 +38,7 @@ variable "detector_recipe2_display_name" {
 variable "responder_recipe2_display_name" {
   default = "test2-responder"
 }
+
 variable "igw_display_name" {
 
 default = "internet-gateway"
@@ -76,19 +76,6 @@ variable "vcn01_subnet_app01_cidr_block" {
 
 variable "vcn01_subnet_app01_display_name" {
   default = "vcn01_subnet_app01"
-}
-
-variable "vcn01_subnet_db01_cidr_block" {
-  default = "10.0.20.0/24"
-}
-
-variable "vcn01_subnet_db01_display_name" {
-  default = "vcn01_subnet_db01"
-}
-
-variable "use_existing_network" {
-  type = bool
-  default = false
 }
 
 variable "vcn02_cidr_block" {

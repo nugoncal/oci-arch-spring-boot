@@ -11,14 +11,14 @@ variableGroups:
 - title: General Configuration
   visible: false
   variables:
-  - compartment_ocid
-  - compartment_SZ_ocid
   - tenancy_ocid
-  - region
 
 - title: Required Configuration
   visible: true  
   variables:
+  - region
+  - compartment_ocid
+  - compartment_SZ_ocid
   - BastionInstanceShape
   - WebserverInstanceShape
   - mysql_db_system_admin_password 
@@ -28,6 +28,7 @@ variableGroups:
   variables:
   - instance_os
   - linux_os_version
+  - OsImage
   - igw_display_name
   - vcn01_display_name
   - vcn01_dns_label
@@ -43,8 +44,17 @@ variableGroups:
   - vcn02_cidr_block
   - vcn02_dns_label
   - mysql_db_system_admin_username 
+  - cloud_guard_configuration_status
+  - target1_display_name
+  - target2_display_name
+  - detector_recipe1_display_name
+  - responder_recipe1_display_name
+  - detector_recipe2_display_name
+  - responder_recipe2_display_name
 
 variables:
+
+  # Required Configuration
 
   compartment_ocid:
     type: oci:identity:compartment:id
@@ -63,6 +73,59 @@ variables:
     required: true
     title: Region
     description: "Choose Region where you want to deploy the resources defined by this stack."
+
+  BastionInstanceShape:
+    type: oci:core:instanceshape:name
+    required: false
+    title: "Bastion Instance Shape"
+    description: "Choose a shape allocated to Bastion instance."
+    default: "VM.Standard.E2.1.Micro"
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  WebserverInstanceShape:
+    type: oci:core:instanceshape:name
+    required: false
+    title: "Webserver Instance Shape"
+    description: "Choose a shape allocated to Webserver instance."
+    default: "VM.Standard2.1"
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  mysql_db_system_admin_password:
+    type: password
+    required: true
+    title: "MySQL Database Password"
+    description: "Type MySQL atabase Password for ADMIN user."
+    minLength: 12
+    maxLength: 30
+    pattern: ^[A-Za-z][A-Za-z0-9_#\$]+$ 
+
+  # Optional Configuration
+
+  instance_os:
+    type: enum
+    title: "Instance OS for Bastion Server"
+    description: "Choose OS/image installed for Bastion Server."
+    required: false
+    enum:
+      - "Oracle Linux - Latest Image"
+
+  linux_os_version:
+    type: enum
+    title: "OS Version for Bastion Server"
+    description: "Choose Operating System version for Bastion Server."
+    required: false
+    enum:
+      - "7.8"
+
+  OsImage:
+    type: enum
+    title: "OS Image for Webserver"
+    description: "Choose OS Image for Webserver server"
+    required: false
+    enum:
+      - "Oracle-Linux-7.8-2020.05.26-0"
 
   igw_display_name:
     type: string
@@ -103,6 +166,12 @@ variables:
     description: "Choose Non Security Zone CIDR block of Public Subnet 2"
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
 
+  vcn01_subnet_pub02_display_name:
+    type: string
+    required: true
+    title: "Name of Non Security Zone Public Subnet 2"
+    description: "Type Non Security Zone Public Subnet 2 Display Name."
+
   vcn01_subnet_app01_cidr_block:
     type: string
     required: true
@@ -110,6 +179,12 @@ variables:
     description: "Choose Non Security Zone CIDR block of App Subnet"
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
   
+  vcn01_subnet_app01_display_name:
+    type: string
+    required: true
+    title: "Name of Non Security Zone App Subnet"
+    description: "Type Non Security Zone App Subnet Display Name."
+
   vcn02_cidr_block:
     type: string
     required: true
@@ -136,46 +211,62 @@ variables:
     description: "Choose Security Zone CIDR block of Database Subnet"
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
   
+  vcn02_subnet_db01_display_name:
+    type: string
+    required: true
+    title: "Name of Non Security Zone Database Subnet"
+    description: "Type Non Security Zone Database Subnet Display Name."
+
   mysql_db_system_admin_username:
     type: string
     required: true
     title: "MySQL Admin User name"
     description: "Type MySQL Admin user name."
 
-  mysql_db_system_admin_password:
-    type: password
-    required: true
-    title: "MySQL Database Password"
-    description: "Type MySQL atabase Password for ADMIN user."
-    minLength: 12
-    maxLength: 30
-    pattern: ^[A-Za-z][A-Za-z0-9_#\$]+$ 
-
-  BastionInstanceShape:
-    type: oci:core:instanceshape:name
-    required: false
-    title: "Bastion Instance Shape"
-    description: "Choose a shape allocated to Bastion instance."
-    default: "VM.Standard.E2.1.Micro"
-    dependsOn:
-      compartmentId: ${compartment_ocid}
-
-  WebserverInstanceShape:
-    type: oci:core:instanceshape:name
-    required: false
-    title: "Webserver Instance Shape"
-    description: "Choose a shape allocated to Webserver instance."
-    default: "VM.Standard2.1"
-    dependsOn:
-      compartmentId: ${compartment_ocid}
-
-  instance_os:
+  cloud_guard_configuration_status:
     type: enum
-    title: "Image OS"
-    description: "The OS/image installed on the Bastion instance."
+    title: "Cloud Guard Configuration Status"
+    description: "Choose if Cloud Guard Configuration should be enabled."
     required: false
     enum:
-      - "Oracle Linux - Latest Image"
+      - "ENABLED"
+      - "DISABLED"
+
+  target1_display_name:
+    type: string
+    required: true
+    title: "Cloud Guard Target1 Display Name"
+    description: "Type Cloud Guard Target1 Display Name."
+
+  target2_display_name:
+    type: string
+    required: true
+    title: "Cloud Guard Target2 Display Name"
+    description: "Type Cloud Guard Target2 Display Name."
+
+  detector_recipe1_display_name:
+    type: string
+    required: true
+    title: "Cloud Guard Detector Recipe1 Display Name"
+    description: "Type Cloud Guard Detector Recipe1 Display Name."
+
+  responder_recipe1_display_name:
+    type: string
+    required: true
+    title: "Cloud Guard Responder Recipe1 Display Name"
+    description: "Type Cloud Guard Responder Recipe1 Display Name."
+
+  detector_recipe2_display_name:
+    type: string
+    required: true
+    title: "Cloud Guard Detector Recipe2 Display Name"
+    description: "Type Cloud Guard Detector Recipe2 Display Name."
+
+  responder_recipe2_display_name:
+    type: string
+    required: true
+    title: "Cloud Guard Responder Recipe2 Display Name"
+    description: "Type Cloud Guard Responder Recipe2 Display Name."
 
 outputs:
 
