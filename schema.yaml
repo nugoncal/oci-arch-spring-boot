@@ -36,13 +36,13 @@ variableGroups:
   - vcn01_subnet_pub01_cidr_block
   - vcn01_subnet_pub01_display_name
   - vcn01_subnet_pub02_cidr_block
+  - vcn01_subnet_pub02_display_name
   - vcn01_subnet_app01_cidr_block
-  - vcn02_subnet_pub01_cidr_block
-  - vcn02_subnet_pub02_cidr_bloc
-  - vcn02_subnet_db01_cidr_block
+  - vcn01_subnet_app01_display_name
   - vcn02_display_name
   - vcn02_cidr_block
   - vcn02_dns_label
+  - vcn02_subnet_db01_cidr_block
   - mysql_db_system_admin_username 
   - cloud_guard_configuration_status
   - target1_display_name

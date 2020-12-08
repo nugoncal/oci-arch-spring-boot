@@ -88,22 +88,6 @@ variable "vcn02_display_name" {
   default = "vcn02"
 }
 
-variable "vcn02_subnet_pub01_cidr_block" {
-  default = "11.0.1.0/24"
-}
-
-variable "vcn02_subnet_pub01_display_name" {
-  default = "vcn02_subnet_pub01"
-}
-
-variable "vcn02_subnet_pub02_cidr_block" {
-  default = "11.0.2.0/24"
-}
-
-variable "vcn02_subnet_pub02_display_name" {
-  default = "vcn02_subnet_pub02"
-}
-
 variable "vcn02_subnet_app01_cidr_block" {
   default = "11.0.10.0/24"
 }
