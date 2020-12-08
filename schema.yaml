@@ -17,6 +17,7 @@ variableGroups:
   visible: true  
   variables:
   - region
+  - cloud_guard_configuration_reporting_region
   - compartment_ocid
   - compartment_SZ_ocid
   - BastionInstanceShape
@@ -72,7 +73,14 @@ variableGroups:
   - detector_recipe_detector_rules_details_is_enabled
   - detector_recipe_detector_rules_details_labels
   - detector_recipe_detector_rules_details_risk_level
-  - detector_recipe_freeform_tags   
+  - detector_recipe_freeform_tags 
+  - detector_recipe_state
+  - target_description
+  - target_display_name
+  - target_state
+  - target_target_resource_type
+  - target_target_detector_recipes_detector_rules_details_condition_groups_condition
+  - responder_recipe_responder_rules_details_is_enabled  
 
 variables:
 
@@ -95,6 +103,12 @@ variables:
     required: true
     title: Region
     description: "Choose Region where you want to deploy the resources defined by this stack."
+
+  cloud_guard_configuration_reporting_region:
+    type: oci:identity:region:name
+    required: true
+    title: "Region for Cloud Guard Configuration Reporting"
+    description: "Choose Region where you want to define Cloud Guard Configuration Reporting."
 
   BastionInstanceShape:
     type: oci:core:instanceshape:name
@@ -424,7 +438,7 @@ variables:
   detector_recipe_detector_rules_details_risk_level:
     type: enum
     required: false
-    default: true
+    default: "HIGH"
     title: "Cloud Guard Detector Recipe Detector Rules Details Risk Level"
     description: "Choose Cloud Guard Detector Recipe Detector Rules Details Risk Level."
     enum:
@@ -435,8 +449,61 @@ variables:
     required: false
     title: "Cloud Guard Detector Recipe Freeform Tags"
     description: "Type Cloud Guard Detector Recipe Freeform Tags."  
- 
 
+  detector_recipe_state:
+    type: enum
+    required: false
+    default: "ACTIVE"
+    title: "Cloud Guard Recipe State"
+    description: "Choose Cloud Guard Recipe State."
+    enum:
+      - "ACTIVE"
+
+  target_description:
+    type: string
+    required: false
+    title: "Cloud Guard Target description"
+    description: "Type Cloud Guard Target description."  
+
+  target_display_name:
+    type: string
+    required: false
+    title: "Cloud Guard Target display name"
+    description: "Type Cloud Guard Target display name."  
+
+  target_state:
+    type: enum
+    required: false
+    default: "ACTIVE"
+    title: "Cloud Guard Target State"
+    description: "Choose Cloud Guard Target State."
+    enum:
+      - "ACTIVE"
+
+  target_target_resource_type:
+    type: enum
+    required: false
+    default: "COMPARTMENT"
+    title: "Cloud Guard Target Resource Type"
+    description: "Choose Cloud Guard Target Resource Type."
+    enum:
+      - "COMPARTMENT"
+
+  target_target_detector_recipes_detector_rules_details_condition_groups_condition:
+    type: text
+    required: false
+    title: "Cloud Guard Target Detector Recipes Detector Rules Details Condition Group Condition"
+    description: "Type Cloud Guard Target Detector Recipes Detector Rules Details Condition Group Condition."  
+
+  responder_recipe_responder_rules_details_is_enabled:
+    type: enum
+    required: false
+    default: "ACTIVE"
+    title: "Cloud Guard Responder Recipe Responder Rules Details Enabled"
+    description: "Choose if Cloud Guard Responder Recipe Responder Rules Details is Enabled."
+    enum:
+      - "ACTIVE"
+    
 outputs:
 
   generated_ssh_private_key:
