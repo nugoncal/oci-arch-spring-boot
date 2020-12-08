@@ -88,14 +88,6 @@ variable "vcn02_display_name" {
   default = "vcn02"
 }
 
-variable "vcn02_subnet_app01_cidr_block" {
-  default = "11.0.10.0/24"
-}
-
-variable "vcn02_subnet_app01_display_name" {
-  default = "vcn02_subnet_app01"
-}
-
 variable "vcn02_subnet_db01_cidr_block" {
   default = "11.0.20.0/24"
 }
@@ -126,8 +118,6 @@ variable "WebserverInstanceShape" {
 variable "OsImage" {
    default = "Oracle-Linux-7.8-2020.05.26-0"
 }
-variable "ATP_tde_wallet_zip_file" {default = "tde_wallet_ATPdb1.zip"}
-
 variable "numberOfNodes" {default = 3}
 
 variable mysql_db_system_admin_password {

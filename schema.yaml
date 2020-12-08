@@ -26,6 +26,7 @@ variableGroups:
 - title: Optional Configuration
   visible: true  
   variables:
+  - numberOfNodes
   - instance_os
   - linux_os_version
   - OsImage
@@ -44,6 +45,10 @@ variableGroups:
   - vcn02_dns_label
   - vcn02_subnet_db01_cidr_block
   - mysql_db_system_admin_username 
+  - mysql_db_system_backup_policy_is_enabled
+  - mysql_db_system_data_storage_size_in_gb
+  - mysql_db_system_display_name
+  - mysql_db_system_hostname_label
   - cloud_guard_configuration_status
   - target1_display_name
   - target2_display_name
@@ -102,6 +107,15 @@ variables:
     pattern: ^[A-Za-z][A-Za-z0-9_#\$]+$ 
 
   # Optional Configuration
+
+  numberOfNodes:
+    type: number
+    title: "Number of Webservers"
+    description: "Choose number of Webservers."
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 1
 
   instance_os:
     type: enum
@@ -222,6 +236,37 @@ variables:
     required: true
     title: "MySQL Admin User name"
     description: "Type MySQL Admin user name."
+
+  mysql_db_system_backup_policy_is_enabled:
+    type: enum
+    required: true
+    default: "NO"
+    title: "MySQL DBSystem Backup Policy enabled"
+    description: "Choose if MySQL DBSystem Backup Policy will be enabled."
+    enum:
+      - "NO"
+      - "YES"
+
+  mysql_db_system_data_storage_size_in_gb:
+    type: number
+    title: "MySQL DBSystem Data Storage size in GB"
+    description: "Choose MySQL DBSystem Data Storage size in GB."
+    minimum: 50
+    maximum: 65536
+    multipleOf: 1
+    default: 50
+
+  mysql_db_system_display_name:
+    type: string
+    required: true
+    title: "MySQL DBSystem Display Name"
+    description: "Type MySQL DBSystem Display Name."
+
+  mysql_db_system_hostname_label:
+    type: string
+    required: true
+    title: "MySQL DBSystem Hostname Label"
+    description: "Type MySQL DBSystem Hostname Label."
 
   cloud_guard_configuration_status:
     type: enum
