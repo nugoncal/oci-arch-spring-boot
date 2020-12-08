@@ -314,9 +314,9 @@ resource "oci_cloud_guard_cloud_guard_configuration" "enable_cloud_guard" {
 
 resource "oci_cloud_guard_detector_recipe" "cloned_detector_recipe" {
   #Required
-  compartment_id            = "${var.compartment_ocid}"
-  display_name              = "${var.detector_recipe1_display_name}"
-  source_detector_recipe_id = "${data.oci_cloud_guard_detector_recipes.list_detector_recipes.detector_recipe_collection.0.items.0.id}"
+  compartment_id            = var.compartment_ocid
+  display_name              = var.detector_recipe1_display_name
+  source_detector_recipe_id = data.oci_cloud_guard_detector_recipes.list_detector_recipes.detector_recipe_collection.0.items.0.id
 }
 
 resource "oci_cloud_guard_responder_recipe" "cloned_responder_recipe" {
@@ -328,9 +328,9 @@ resource "oci_cloud_guard_responder_recipe" "cloned_responder_recipe" {
 }
 resource "oci_cloud_guard_detector_recipe" "cloned2_detector_recipe" {
   #Required
-  compartment_id            = "${var.compartment_ocid}"
-  display_name              = "${var.detector_recipe2_display_name}"
-  source_detector_recipe_id = "${data.oci_cloud_guard_detector_recipes.list_detector_recipes.detector_recipe_collection.0.items.0.id}"
+  compartment_id            = var.compartment_ocid
+  display_name              = var.detector_recipe2_display_name
+  source_detector_recipe_id = data.oci_cloud_guard_detector_recipes.list_detector_recipes.detector_recipe_collection.0.items.0.id
 }
 
 resource "oci_cloud_guard_responder_recipe" "cloned2_responder_recipe" {
