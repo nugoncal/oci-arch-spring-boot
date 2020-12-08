@@ -44,6 +44,7 @@ variableGroups:
   - vcn02_cidr_block
   - vcn02_dns_label
   - vcn02_subnet_db01_cidr_block
+  - vcn02_subnet_db01_display_name
   - mysql_db_system_admin_username 
   - mysql_db_system_backup_policy_is_enabled
   - mysql_db_system_data_storage_size_in_gb
@@ -53,9 +54,14 @@ variableGroups:
   - target1_display_name
   - target2_display_name
   - detector_recipe1_display_name
+  - detector_recipe1_description
   - responder_recipe1_display_name
   - detector_recipe2_display_name
+  - detector_recipe2_description
   - responder_recipe2_display_name
+  - detector_recipe_access_level
+  - detector_recipe_compartment_id_in_subtree
+  - detector_recipe_defined_tags_value
 
 variables:
 
@@ -295,6 +301,12 @@ variables:
     title: "Cloud Guard Detector Recipe1 Display Name"
     description: "Type Cloud Guard Detector Recipe1 Display Name."
 
+  detector_recipe1_description:
+    type: string
+    required: true
+    title: "Cloud Guard Detector Recipe1 description"
+    description: "Type Cloud Guard Detector Recipe1 description."
+
   responder_recipe1_display_name:
     type: string
     required: true
@@ -307,11 +319,38 @@ variables:
     title: "Cloud Guard Detector Recipe2 Display Name"
     description: "Type Cloud Guard Detector Recipe2 Display Name."
 
+  detector_recipe2_description:
+    type: string
+    required: true
+    title: "Cloud Guard Detector Recipe2 description"
+    description: "Type Cloud Guard Detector Recipe2 description."
+
   responder_recipe2_display_name:
     type: string
     required: true
     title: "Cloud Guard Responder Recipe2 Display Name"
     description: "Type Cloud Guard Responder Recipe2 Display Name."
+
+  detector_recipe_access_level:
+    type: enum
+    title: "Cloud Guard Detector Recipe Access Level"
+    description: "Choose Cloud Guard Detector Recipe Access Level."
+    required: false
+    enum:
+      - "ACCESSIBLE"
+      - "RESTRICTED"
+
+  detector_recipe_compartment_id_in_subtree:
+    type: boolean
+    default: true
+    title: "Cloud Guard Detector Recipe Compartment ID in subtree"
+    description: "Choose Cloud Guard Detector Recipe Compartment ID in subtree."
+
+  detector_recipe_defined_tags_value:
+    type: string
+    required: true
+    title: "Cloud Guard Detector Recipe defined tag value"
+    description: "Type Cloud Guard Detector Recipe defined tag value."
 
 outputs:
 
