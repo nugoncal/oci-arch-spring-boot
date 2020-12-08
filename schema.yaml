@@ -56,12 +56,23 @@ variableGroups:
   - detector_recipe1_display_name
   - detector_recipe1_description
   - responder_recipe1_display_name
+  - responder_recipe1_description
   - detector_recipe2_display_name
   - detector_recipe2_description
   - responder_recipe2_display_name
+  - responder_recipe2_description
   - detector_recipe_access_level
   - detector_recipe_compartment_id_in_subtree
   - detector_recipe_defined_tags_value
+  - detector_recipe_detector_rules_details_condition
+  - detector_recipe_detector_rules_details_configurations_data_type
+  - detector_recipe_detector_rules_details_configurations_value
+  - detector_recipe_detector_rules_details_configurations_values_list_type
+  - detector_recipe_detector_rules_details_configurations_values_value
+  - detector_recipe_detector_rules_details_is_enabled
+  - detector_recipe_detector_rules_details_labels
+  - detector_recipe_detector_rules_details_risk_level
+  - detector_recipe_freeform_tags   
 
 variables:
 
@@ -87,7 +98,7 @@ variables:
 
   BastionInstanceShape:
     type: oci:core:instanceshape:name
-    required: false
+    required: true
     title: "Bastion Instance Shape"
     description: "Choose a shape allocated to Bastion instance."
     default: "VM.Standard.E2.1.Micro"
@@ -96,7 +107,7 @@ variables:
 
   WebserverInstanceShape:
     type: oci:core:instanceshape:name
-    required: false
+    required: true
     title: "Webserver Instance Shape"
     description: "Choose a shape allocated to Webserver instance."
     default: "VM.Standard2.1"
@@ -122,6 +133,7 @@ variables:
     maximum: 128
     multipleOf: 1
     default: 1
+    required: false
 
   instance_os:
     type: enum
@@ -149,103 +161,103 @@ variables:
 
   igw_display_name:
     type: string
-    required: true
+    required: false
     title: "IGW Name"
     description: "Type Display name of the Internet Gateway from the VCN."
 
   vcn01_cidr_block:
     type: string
-    required: true
+    required: false
     title: "Non Security Zone VCN CIDR Block"
     description: "Choose CIDR block that will be assigned to the Non Security Zone VCN."
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
 
   vcn01_dns_label:
     type: string
-    required: true
+    required: false
     title: "DNS Label of Non Security Zone VCN"
     description: "Type DNS label that will be asigned to the Non Security Zone VCN."
 
   vcn01_display_name:
     type: string
-    required: true
+    required: false
     title: "Name of Non Security Zone VCN"
     description: "Type Display Name assigned to Non Security Zone VCN."
 
   vcn01_subnet_pub01_cidr_block:
     type: string
-    required: true
+    required: false
     title: "Non Security Zone Public Subnet 1 CIDR Block"
     description: "Choose Non Security Zone CIDR block of Public Subnet 1."
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
 
   vcn01_subnet_pub02_cidr_block:
     type: string
-    required: true
+    required: false
     title: "Non Security Zone Public Subnet 2 CIDR Block"
     description: "Choose Non Security Zone CIDR block of Public Subnet 2"
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
 
   vcn01_subnet_pub02_display_name:
     type: string
-    required: true
+    required: false
     title: "Name of Non Security Zone Public Subnet 2"
     description: "Type Non Security Zone Public Subnet 2 Display Name."
 
   vcn01_subnet_app01_cidr_block:
     type: string
-    required: true
+    required: false
     title: "Non Security Zone App Subnet CIDR Block"
     description: "Choose Non Security Zone CIDR block of App Subnet"
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
   
   vcn01_subnet_app01_display_name:
     type: string
-    required: true
+    required: false
     title: "Name of Non Security Zone App Subnet"
     description: "Type Non Security Zone App Subnet Display Name."
 
   vcn02_cidr_block:
     type: string
-    required: true
+    required: false
     title: "Security Zone VCN CIDR Block"
     description: "Choose CIDR block that will be assigned to the Security Zone VCN."
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
   
   vcn02_dns_label:
     type: string
-    required: true
+    required: false
     title: "DNS Label of Security Zone VCN"
     description: "Type DNS label that will be asigned to the Security Zone VCN."
 
   vcn02_display_name:
     type: string
-    required: true
+    required: false
     title: "Name of Security Zone VCN"
     description: "Type Display Name assigned to Security Zone VCN."
 
   vcn02_subnet_db01_cidr_block:
     type: string
-    required: true
+    required: false
     title: "Security Zone Database Subnet CIDR Block"
     description: "Choose Security Zone CIDR block of Database Subnet"
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
   
   vcn02_subnet_db01_display_name:
     type: string
-    required: true
+    required: false
     title: "Name of Non Security Zone Database Subnet"
     description: "Type Non Security Zone Database Subnet Display Name."
 
   mysql_db_system_admin_username:
     type: string
-    required: true
+    required: false
     title: "MySQL Admin User name"
     description: "Type MySQL Admin user name."
 
   mysql_db_system_backup_policy_is_enabled:
     type: enum
-    required: true
+    required: false
     default: "NO"
     title: "MySQL DBSystem Backup Policy enabled"
     description: "Choose if MySQL DBSystem Backup Policy will be enabled."
@@ -255,6 +267,7 @@ variables:
 
   mysql_db_system_data_storage_size_in_gb:
     type: number
+    required: false
     title: "MySQL DBSystem Data Storage size in GB"
     description: "Choose MySQL DBSystem Data Storage size in GB."
     minimum: 50
@@ -264,13 +277,13 @@ variables:
 
   mysql_db_system_display_name:
     type: string
-    required: true
+    required: false
     title: "MySQL DBSystem Display Name"
     description: "Type MySQL DBSystem Display Name."
 
   mysql_db_system_hostname_label:
     type: string
-    required: true
+    required: false
     title: "MySQL DBSystem Hostname Label"
     description: "Type MySQL DBSystem Hostname Label."
 
@@ -285,51 +298,63 @@ variables:
 
   target1_display_name:
     type: string
-    required: true
+    required: false
     title: "Cloud Guard Target1 Display Name"
     description: "Type Cloud Guard Target1 Display Name."
 
   target2_display_name:
     type: string
-    required: true
+    required: false
     title: "Cloud Guard Target2 Display Name"
     description: "Type Cloud Guard Target2 Display Name."
 
   detector_recipe1_display_name:
     type: string
-    required: true
+    required: false
     title: "Cloud Guard Detector Recipe1 Display Name"
     description: "Type Cloud Guard Detector Recipe1 Display Name."
 
   detector_recipe1_description:
     type: string
-    required: true
+    required: false
     title: "Cloud Guard Detector Recipe1 description"
     description: "Type Cloud Guard Detector Recipe1 description."
 
   responder_recipe1_display_name:
     type: string
-    required: true
+    required: false
     title: "Cloud Guard Responder Recipe1 Display Name"
     description: "Type Cloud Guard Responder Recipe1 Display Name."
 
+  responder_recipe1_description:
+    type: string
+    required: false
+    title: "Cloud Guard Responder Recipe1 description"
+    description: "Type Cloud Guard Responder Recipe1 description."
+
   detector_recipe2_display_name:
     type: string
-    required: true
+    required: false
     title: "Cloud Guard Detector Recipe2 Display Name"
     description: "Type Cloud Guard Detector Recipe2 Display Name."
 
   detector_recipe2_description:
     type: string
-    required: true
+    required: false
     title: "Cloud Guard Detector Recipe2 description"
     description: "Type Cloud Guard Detector Recipe2 description."
 
   responder_recipe2_display_name:
     type: string
-    required: true
+    required: false
     title: "Cloud Guard Responder Recipe2 Display Name"
     description: "Type Cloud Guard Responder Recipe2 Display Name."
+
+  responder_recipe2_description:
+    type: string
+    required: false
+    title: "Cloud Guard Responder Recipe2 description"
+    description: "Type Cloud Guard Responder Recipe2 description."
 
   detector_recipe_access_level:
     type: enum
@@ -343,14 +368,74 @@ variables:
   detector_recipe_compartment_id_in_subtree:
     type: boolean
     default: true
+    required: false
     title: "Cloud Guard Detector Recipe Compartment ID in subtree"
     description: "Choose Cloud Guard Detector Recipe Compartment ID in subtree."
 
   detector_recipe_defined_tags_value:
     type: string
-    required: true
+    required: false
     title: "Cloud Guard Detector Recipe defined tag value"
     description: "Type Cloud Guard Detector Recipe defined tag value."
+  
+  detector_recipe_detector_rules_details_condition:
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Detector Rules Details Conditions"
+    description: "Type Cloud Guard Detector Recipe Detector Rules Details Conditions."
+
+  detector_recipe_detector_rules_details_configurations_data_type:
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Detector Rules Details Configuration Data Type"
+    description: "Type Cloud Guard Detector Recipe Detector Rules Details Configuration Data Type."
+
+  detector_recipe_detector_rules_details_configurations_value:
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Detector Rules Details Configuration Value"
+    description: "Type Cloud Guard Detector Recipe Detector Rules Details Configuration Value."
+
+  detector_recipe_detector_rules_details_configurations_values_list_type:
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Detector Rules Details Configuration Values List Type"
+    description: "Type Cloud Guard Detector Recipe Detector Rules Details Configuration Values List Type."
+
+  detector_recipe_detector_rules_details_configurations_values_value:
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Detector Rules Details Configuration Values Value"
+    description: "Type Cloud Guard Detector Recipe Detector Rules Details Configuration Values Value."  
+
+  detector_recipe_detector_rules_details_is_enabled:
+    type: boolean
+    required: false
+    default: true
+    title: "Cloud Guard Detector Recipe Detector Rules Details Enabled"
+    description: "Choose if Cloud Guard Detector Recipe Detector Rules Details is enabled."
+
+  detector_recipe_detector_rules_details_labels:
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Detector Rules Details Label"
+    description: "Type Cloud Guard Detector Recipe Detector Rules Details Label."  
+
+  detector_recipe_detector_rules_details_risk_level:
+    type: enum
+    required: false
+    default: true
+    title: "Cloud Guard Detector Recipe Detector Rules Details Risk Level"
+    description: "Choose Cloud Guard Detector Recipe Detector Rules Details Risk Level."
+    enum:
+      - "HIGH"
+
+  detector_recipe_freeform_tags:   
+    type: string
+    required: false
+    title: "Cloud Guard Detector Recipe Freeform Tags"
+    description: "Type Cloud Guard Detector Recipe Freeform Tags."  
+ 
 
 outputs:
 
