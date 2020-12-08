@@ -144,8 +144,12 @@ variable "linux_os_version" {
   default     = "7.8"
 }
 
-variable "InstanceShape" {
-    default = "VM.Standard2.1"
+variable "BastionInstanceShape" {
+  default = "VM.Standard2.1"
+}
+
+variable "WebserverInstanceShape" {
+  default = "VM.Standard2.1"
 }
 
 variable "OsImage" {

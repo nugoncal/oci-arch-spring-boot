@@ -12,7 +12,7 @@ resource "oci_core_instance" "webserver1" {
   compartment_id = var.compartment_ocid
   fault_domain = "FAULT-DOMAIN-${(count.index%3)+1}"
   display_name = "AppServer-${count.index}"
-  shape = var.InstanceShape
+  shape = var.WebserverInstanceShape
 
   create_vnic_details {
     subnet_id = oci_core_subnet.vcn01_subnet_app01.id

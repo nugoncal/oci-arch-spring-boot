@@ -15,13 +15,19 @@ variableGroups:
   - compartment_SZ_ocid
   - tenancy_ocid
   - region
-  - instance_os
 
 - title: Required Configuration
   visible: true  
   variables:
+  - BastionInstanceShape
+  - WebserverInstanceShape
+  - mysql_db_system_admin_password 
+
+- title: Optional Configuration
+  visible: true  
+  variables:
+  - instance_os
   - linux_os_version
-  - InstanceShape
   - igw_display_name
   - vcn01_display_name
   - vcn01_dns_label
@@ -36,7 +42,6 @@ variableGroups:
   - vcn02_display_name
   - vcn02_cidr_block
   - vcn02_dns_label
-  - mysql_db_system_admin_password 
   - mysql_db_system_admin_username 
 
 variables:
@@ -45,107 +50,122 @@ variables:
     type: oci:identity:compartment:id
     required: true
     title: "Compartment (Non Security Zone)"
-    description: "Compartment where you want to create the Virtual Machines."
+    description: "Choose Compartment where you want to create the Virtual Machines."
   
   compartment_SZ_ocid:
     type: oci:identity:compartment:id
     required: true
     title: "Compartment (Security Zone)"
-    description: "Security Zone Compartment where you want to create MySQL."
+    description: "Choose Security Zone Compartment where you want to create MySQL."
 
   region:
     type: oci:identity:region:name
     required: true
     title: Region
-    description: "Region where you want to deploy the resources defined by this stack."
+    description: "Choose Region where you want to deploy the resources defined by this stack."
 
   igw_display_name:
     type: string
     required: true
     title: "IGW Name"
-    description: "Display name of the Internet Gateway from the VCN."
+    description: "Type Display name of the Internet Gateway from the VCN."
 
   vcn01_cidr_block:
     type: string
     required: true
-    title: "Non Secuirty zone VCN CIDR Block"
-    description: "CIDR block that will be assigned to the VCN."
+    title: "Non Security Zone VCN CIDR Block"
+    description: "Choose CIDR block that will be assigned to the Non Security Zone VCN."
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
 
   vcn01_dns_label:
     type: string
     required: true
-    title: "DNS Label of Non Secuirty zone VCN"
-    description: "DNS label that will be asigned to the VCN."
+    title: "DNS Label of Non Security Zone VCN"
+    description: "Type DNS label that will be asigned to the Non Security Zone VCN."
 
   vcn01_display_name:
     type: string
     required: true
-    title: "VNC Name"
-    description: "Display name assigned to Non Secuirty zone VCN."
+    title: "Name of Non Security Zone VCN"
+    description: "Type Display Name assigned to Non Security Zone VCN."
 
   vcn01_subnet_pub01_cidr_block:
     type: string
     required: true
-    title: "vcn01_subnet_pub01_cidr_block"
-    description: "Non Secuirty Zone CIDR block of subnet."
-    
+    title: "Non Security Zone Public Subnet 1 CIDR Block"
+    description: "Choose Non Security Zone CIDR block of Public Subnet 1."
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+
   vcn01_subnet_pub02_cidr_block:
     type: string
     required: true
-    title: "vcn01_subnet_pub02_cidr_block"
-    description: "Non Secuirty Zone CIDR block of subnet"
+    title: "Non Security Zone Public Subnet 2 CIDR Block"
+    description: "Choose Non Security Zone CIDR block of Public Subnet 2"
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
 
   vcn01_subnet_app01_cidr_block:
     type: string
     required: true
-    title: "vcn01_subnet_app01_cidr_block"
-    description: "Non Secuirty Zone CIDR block of subnet"
+    title: "Non Security Zone App Subnet CIDR Block"
+    description: "Choose Non Security Zone CIDR block of App Subnet"
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
   
   vcn02_cidr_block:
     type: string
     required: true
-    title: "Non Secuirty zone VCN CIDR Block"
-    description: "CIDR block that will be assigned to the VCN"
-
+    title: "Security Zone VCN CIDR Block"
+    description: "Choose CIDR block that will be assigned to the Security Zone VCN."
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+  
   vcn02_dns_label:
     type: string
     required: true
-    title: "DNS Label of Non Secuirty zone VCN"
-    description: "DNS label that will be asigned to the VCN."
+    title: "DNS Label of Security Zone VCN"
+    description: "Type DNS label that will be asigned to the Security Zone VCN."
 
   vcn02_display_name:
     type: string
     required: true
-    title: "VNC Display Name"
-    description: "Display name assigned to Non Secuirty zone VCN."
+    title: "Name of Security Zone VCN"
+    description: "Type Display Name assigned to Security Zone VCN."
 
   vcn02_subnet_db01_cidr_block:
     type: string
     required: true
-    title: "vcn02_subnet_db01_cidr_block"
-    description: "Secuirty Zone CIDR block of subnet."
-
+    title: "Security Zone Database Subnet CIDR Block"
+    description: "Choose Security Zone CIDR block of Database Subnet"
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+  
   mysql_db_system_admin_username:
     type: string
     required: true
     title: "MySQL Admin User name"
-    description: "MySQL Admin user name."
+    description: "Type MySQL Admin user name."
 
   mysql_db_system_admin_password:
     type: password
     required: true
     title: "MySQL Database Password"
-    description: "MySQL atabase Password for ADMIN user."
+    description: "Type MySQL atabase Password for ADMIN user."
     minLength: 12
     maxLength: 30
     pattern: ^[A-Za-z][A-Za-z0-9_#\$]+$ 
 
-  InstanceShape:
+  BastionInstanceShape:
     type: oci:core:instanceshape:name
     required: false
-    title: Instance Shape
-    description: A shape is a template that determines the number of CPUs, amount of memory, and other resources allocated to Bastion instance.
+    title: "Bastion Instance Shape"
+    description: "Choose a shape allocated to Bastion instance."
     default: "VM.Standard.E2.1.Micro"
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  WebserverInstanceShape:
+    type: oci:core:instanceshape:name
+    required: false
+    title: "Webserver Instance Shape"
+    description: "Choose a shape allocated to Webserver instance."
+    default: "VM.Standard2.1"
     dependsOn:
       compartmentId: ${compartment_ocid}
 

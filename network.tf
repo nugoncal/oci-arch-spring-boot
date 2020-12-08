@@ -388,7 +388,7 @@ resource "oci_core_instance" "bastion_instance" {
   availability_domain = data.oci_identity_availability_domains.ADs.availability_domains[1]["name"]
   compartment_id = var.compartment_ocid
   display_name = "BastionVM"
-  shape = var.InstanceShape
+  shape = var.BastionInstanceShape
 
   create_vnic_details {
     subnet_id = oci_core_subnet.vcn01_subnet_pub02.id
