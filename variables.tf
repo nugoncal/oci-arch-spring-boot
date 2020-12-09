@@ -16,11 +16,11 @@ variable "cloud_guard_configuration_status" {
   default = "ENABLED"
 }
 variable "target1_display_name" {
-  default = ""
+  default = "Non_SZ_Compartment"
 }
 
 variable "target2_display_name" {
-  default = "SZ"
+  default = "SZ_Compartment"
 }
 
 variable "detector_recipe1_display_name" {

@@ -120,7 +120,7 @@ variables:
     required: true
     title: "Bastion Instance Shape"
     description: "Choose a shape allocated to Bastion instance."
-    default: "VM.Standard.E2.1.Micro"
+    default: "VM.Standard2.1"
     dependsOn:
       compartmentId: ${compartment_ocid}
 
