@@ -1,16 +1,43 @@
-## Copyright © 2020, Oracle and/or its affiliates. 
+## Copyright © 2021, Oracle and/or its affiliates. 
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
-
-##orlando
-#variable "user_ocid" {} 
 
 variable "tenancy_ocid" {}
 variable "region" {}
 variable "compartment_ocid" {}
-variable "compartment_SZ_ocid" {}
+variable "compartment_SZ_ocid" {
+  default = ""
+}
 variable "user_ocid" {}
 variable "fingerprint" {}
-variable "private_key_path"{}
+variable "private_key_path" {}
+
+variable "ssh_public_key" {
+  default = ""
+}
+
+variable "springboot_download_url" {
+  default = "https://objectstorage.us-ashburn-1.oraclecloud.com/p/xcQZ7geJpxVtHDVbSfeHMCeFWK83kHMK68O1lY6YIBaspWJhRA7sccHU_MrEJOVh/n/ociobenablement/b/java_deployments/o/ocispringbootdemo-0.0.1-SNAPSHOT.jar"
+}
+
+variable "release" {
+  description = "Reference Architecture Release (OCI Architecture Center)"
+  default     = "1.0"
+}
+
+variable "availablity_domain_name" {
+  default = ""
+}
+variable "availablity_domain_number" {
+  default = 0
+}
+
+variable "use_bastion_service" {
+  default = false
+}
+
+variable "use_cloud_guard" {
+  default = true
+}
 
 variable "cloud_guard_configuration_status" {
   default = "ENABLED"
@@ -41,7 +68,7 @@ variable "responder_recipe2_display_name" {
 
 variable "igw_display_name" {
 
-default = "internet-gateway"
+  default = "internet-gateway"
 }
 
 variable "vcn01_cidr_block" {
@@ -96,6 +123,18 @@ variable "vcn02_subnet_db01_display_name" {
   default = "vcn02_subnet_db01"
 }
 
+variable "lb_shape" {
+  default = "flexible"
+}
+
+variable "flex_lb_min_shape" {
+  default = "10"
+}
+
+variable "flex_lb_max_shape" {
+  default = "100"
+}
+
 # OS Images
 variable "instance_os" {
   description = "Operating system for compute instances"
@@ -104,41 +143,56 @@ variable "instance_os" {
 
 variable "linux_os_version" {
   description = "Operating system version for all Linux instances"
-  default     = "7.8"
+  default     = "7.9"
 }
 
 variable "BastionInstanceShape" {
-  default = "VM.Standard2.1"
+  default = "VM.Standard.E3.Flex"
+}
+
+variable "BastionInstanceFlexShapeOCPUS" {
+  default = 1
+}
+
+variable "BastionInstanceFlexShapeMemory" {
+  default = 1
 }
 
 variable "WebserverInstanceShape" {
-  default = "VM.Standard2.1"
+  default = "VM.Standard.E3.Flex"
 }
 
-variable "OsImage" {
-   default = "Oracle-Linux-7.8-2020.05.26-0"
+variable "WebserverInstanceFlexShapeOCPUS" {
+  default = 1
 }
-variable "numberOfNodes" {default = 3}
 
-variable mysql_db_system_admin_password {
-  default = "ChangeMe1234!!!!"
+variable "WebserverInstanceFlexShapeMemory" {
+  default = 10
 }
-variable mysql_db_system_admin_username {
+
+variable "numberOfNodes" { default = 3 }
+
+variable "mysql_shape_name" {
+  default = "MySQL.VM.Standard.E3.1.8GB"
+}
+
+variable "mysql_db_system_admin_password" {
+  default = ""
+}
+variable "mysql_db_system_admin_username" {
   default = "admin"
 }
-# variable mysql_db_system_availability_domain {}
-# variable mysql_configuration_id {}
-# variable mysql_shape_name {} 
-variable mysql_db_system_backup_policy_is_enabled {
+
+variable "mysql_db_system_backup_policy_is_enabled" {
   default = "NO"
 }
-variable mysql_db_system_data_storage_size_in_gb {
+variable "mysql_db_system_data_storage_size_in_gb" {
   default = "50"
 }
-variable mysql_db_system_display_name {
+variable "mysql_db_system_display_name" {
   default = "AppDB"
 }
-variable mysql_db_system_hostname_label {
+variable "mysql_db_system_hostname_label" {
   default = "AppDB1"
 }
 
@@ -264,3 +318,26 @@ variable "responder_recipe_responder_rules_details_is_enabled" {
 variable "responder_recipe_state" {
   default = "ACTIVE"
 }
+
+# Dictionary Locals
+locals {
+  compute_flexible_shapes = [
+    "VM.Standard.E3.Flex",
+    "VM.Standard.E4.Flex",
+    "VM.Standard.A1.Flex",
+    "VM.Optimized3.Flex"
+  ]
+}
+
+# Checks if is using Flexible Compute Shapes
+locals {
+  is_flexible_webserver_instance_shape = contains(local.compute_flexible_shapes, var.WebserverInstanceShape)
+  is_flexible_bastion_instance_shape   = contains(local.compute_flexible_shapes, var.BastionInstanceShape)
+}
+
+# Checks if is using Flexible LB Shapes
+locals {
+  is_flexible_lb_shape = var.lb_shape == "flexible" ? true : false
+}
+
+
