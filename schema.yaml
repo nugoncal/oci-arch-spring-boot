@@ -1,8 +1,8 @@
-## Copyright © 2020, Oracle and/or its affiliates. 
+## Copyright © 2021, Oracle and/or its affiliates. 
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
-title: "Spring Boot framework with MySQL Database Service"
-stackDescription: Deploy Spring Boot framework with MySQL Database Service
+title: "SpringBoot application with MySQL Database Service"
+stackDescription: Deploy SpringBoot application with MySQL Database Service
 schemaVersion: 1.1.0
 version: "20190404"
 locale: "en"
@@ -12,25 +12,59 @@ variableGroups:
   visible: false
   variables:
   - tenancy_ocid
+  - release
+  - springboot_download_url
+  - availablity_domain_number
 
 - title: Required Configuration
   visible: true  
   variables:
   - region
+  - use_cloud_guard
   - cloud_guard_configuration_reporting_region
   - compartment_ocid
   - compartment_SZ_ocid
-  - BastionInstanceShape
-  - WebserverInstanceShape
-  - mysql_db_system_admin_password 
-
-- title: Optional Configuration
-  visible: true  
-  variables:
+  - availablity_domain_name
   - numberOfNodes
+  - mysql_db_system_admin_password
+  - use_bastion_service
+  - show_advanced
+
+- title: Load Balancer Optional Configuration
+  visible: 
+      and:
+        - show_advanced
+  variables:
+  - lb_shape 
+  - flex_lb_min_shape
+  - flex_lb_max_shape 
+
+- title: Compute Instance Optional Configuration
+  visible: 
+      and:
+        - show_advanced  
+  variables:
+  - ssh_public_key
   - instance_os
   - linux_os_version
-  - OsImage
+  - WebserverInstanceShape
+  - WebserverInstanceFlexShapeOCPUS
+  - WebserverInstanceFlexShapeMemory
+
+- title: Bastion Optional Configuration
+  visible: 
+      and:
+        - show_advanced  
+  variables:
+  - BastionInstanceShape
+  - BastionInstanceFlexShapeOCPUS
+  - BastionInstanceFlexShapeMemory
+
+- title: Network Optional Configuration
+  visible: 
+      and:
+        - show_advanced  
+  variables:
   - igw_display_name
   - vcn01_display_name
   - vcn01_dns_label
@@ -46,11 +80,25 @@ variableGroups:
   - vcn02_dns_label
   - vcn02_subnet_db01_cidr_block
   - vcn02_subnet_db01_display_name
-  - mysql_db_system_admin_username 
+
+- title: MDS Optional Configuration
+  visible: 
+      and:
+        - show_advanced  
+  variables:
+  - mysql_db_system_admin_username
+  - mysql_shape_name 
   - mysql_db_system_backup_policy_is_enabled
   - mysql_db_system_data_storage_size_in_gb
   - mysql_db_system_display_name
   - mysql_db_system_hostname_label
+
+- title: Cloud Guard Optional Configuration
+  visible: 
+      and:
+        - show_advanced
+        - use_cloud_guard  
+  variables:
   - cloud_guard_configuration_status
   - target1_display_name
   - target2_display_name
@@ -91,6 +139,13 @@ variables:
 
   # Required Configuration
 
+  show_advanced:
+    type: boolean
+    title: "Show advanced options?"
+    description: "Shows advanced options."
+    visible: true
+    default: false
+
   compartment_ocid:
     type: oci:identity:compartment:id
     required: true
@@ -98,6 +153,9 @@ variables:
     description: "Choose Compartment where you want to create the Virtual Machines."
   
   compartment_SZ_ocid:
+    visible: 
+      and:
+        - use_cloud_guard 
     type: oci:identity:compartment:id
     required: true
     title: "Compartment (Security Zone)"
@@ -109,35 +167,220 @@ variables:
     title: Region
     description: "Choose Region where you want to deploy the resources defined by this stack."
 
+  availablity_domain_name:
+    type: oci:identity:availabilitydomain:name
+    required: true
+    visibile: true
+    title: "Availability Domain to be chosen"
+    description: "Availability Domain to be chosen"
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  use_cloud_guard:
+    type: boolean
+    visibile: true
+    default: true
+    required: false
+    title: "Use OCI Cloud Guard"
+    description: "Check the box to use OCI Cloud Guard and Security Zones"
+
+  use_bastion_service:
+    type: boolean
+    visibile: true
+    default: false
+    required: false
+    title: "Use OCI Bastion Service"
+    description: "Check the box to use OCI Bastion Service instead of Bastion Host VM."
+
   cloud_guard_configuration_reporting_region:
+    visible: 
+      and:
+        - use_cloud_guard
     type: oci:identity:region:name
     required: true
     title: "Region for Cloud Guard Configuration Reporting"
     description: "Choose Region where you want to define Cloud Guard Configuration Reporting."
+
+  ssh_public_key:
+    type: oci:core:ssh:publickey
+    title: "Public SSH Key"
+    description: "Choose public SSH Key to be uploaded into compute instances."
+    required: false
 
   BastionInstanceShape:
     type: oci:core:instanceshape:name
     required: true
     title: "Bastion Instance Shape"
     description: "Choose a shape allocated to Bastion instance."
-    default: "VM.Standard2.1"
+    default: "VM.Standard.E3.Flex"
     dependsOn:
       compartmentId: ${compartment_ocid}
+
+  BastionInstanceFlexShapeOCPUS:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 1
+    title: "Bastion Flex Shape OCPUs"
+    description: "Choose number of OCPUs for Flex Shape."
+    visible:
+      and:
+        - or:
+          - eq:
+            - BastionInstanceShape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - BastionInstanceShape 
+            - "VM.Standard.E4.Flex"
+          - eq:
+            - BastionInstanceShape 
+            - "VM.Standard.A1.Flex"
+          - eq:
+            - BastionInstanceShape 
+            - "VM.Optimized3.Flex"
+
+  BastionInstanceFlexShapeMemory:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 1
+    title: "Bastion Flex Shape Memory (GB)"
+    description: "Choose number GB for Flex Shape Memory."
+    visible:
+      and:
+        - or:
+          - eq:
+            - BastionInstanceShape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - BastionInstanceShape 
+            - "VM.Standard.E4.Flex"
+          - eq:
+            - BastionInstanceShape 
+            - "VM.Standard.A1.Flex"
+          - eq:
+            - BastionInstanceShape 
+            - "VM.Optimized3.Flex"
 
   WebserverInstanceShape:
     type: oci:core:instanceshape:name
     required: true
     title: "Webserver Instance Shape"
     description: "Choose a shape allocated to Webserver instance."
-    default: "VM.Standard2.1"
+    default: "VM.Standard.E3.Flex"
     dependsOn:
       compartmentId: ${compartment_ocid}
+
+  WebserverInstanceFlexShapeOCPUS:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 1
+    title: "Webserver Flex Shape OCPUs"
+    description: "Choose number of OCPUs for Flex Shape."
+    visible:
+      and:
+        - or:
+          - eq:
+            - WebserverInstanceShape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - WebserverInstanceShape 
+            - "VM.Standard.E4.Flex"
+          - eq:
+            - WebserverInstanceShape 
+            - "VM.Standard.A1.Flex"
+          - eq:
+            - WebserverInstanceShape 
+            - "VM.Optimized3.Flex"
+
+  WebserverInstanceFlexShapeMemory:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 10
+    title: "Webserver Flex Shape Memory (GB)"
+    description: "Choose number GB for Flex Shape Memory."
+    visible:
+      and:
+        - or:
+          - eq:
+            - WebserverInstanceShape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - WebserverInstanceShape 
+            - "VM.Standard.E4.Flex"
+          - eq:
+            - WebserverInstanceShape 
+            - "VM.Standard.A1.Flex"
+          - eq:
+            - WebserverInstanceShape 
+            - "VM.Optimized3.Flex"
+
 
   mysql_db_system_admin_password:
     type: password
     required: true
     title: "MySQL Database Password"
     description: "Type MySQL Database Password for ADMIN user."
+
+  lb_shape:
+    type: enum
+    title: "LoadBalancer Shape"
+    description: "Choose LoadBalancer Shape"
+    default: "flexible"
+    required: false 
+    enum:
+      - "flexible"
+      - "100Mbps"
+      - "10Mbps"
+      - "10Mbps-Micro"
+      - "400Mbps"
+      - "8000Mbps"
+
+  flex_lb_min_shape:
+    type: enum
+    required: false
+    default: "10"
+    title: "LB Flex Min Shape"
+    description: "Choose Minimum Shape for Flex Load Balancer."
+    enum:
+      - "10"
+      - "100"
+      - "1000"
+      - "400"
+      - "8000"
+    visible:
+      and:
+        - eq:
+          - lb_shape 
+          - "flexible"
+
+  flex_lb_max_shape:
+    type: enum
+    required: false
+    default: "100"
+    title: "LB Flex Max Shape"
+    description: "Choose Maximum Shape for Flex Load Balancer."
+    enum:
+      - "10"
+      - "100"
+      - "1000"
+      - "400"
+      - "8000"
+    visible:
+      and:
+        - eq:
+          - lb_shape 
+          - "flexible"
 
   # Optional Configuration
 
@@ -148,7 +391,7 @@ variables:
     minimum: 1
     maximum: 128
     multipleOf: 1
-    default: 1
+    default: 3
     required: false
 
   instance_os:
@@ -157,7 +400,7 @@ variables:
     description: "Choose OS/image installed for Bastion Server."
     required: false
     enum:
-      - "Oracle Linux - Latest Image"
+      - "Oracle Linux"
 
   linux_os_version:
     type: enum
@@ -165,15 +408,7 @@ variables:
     description: "Choose Operating System version for Bastion Server."
     required: false
     enum:
-      - "7.8"
-
-  OsImage:
-    type: enum
-    title: "OS Image for Webserver"
-    description: "Choose OS Image for Webserver server"
-    required: false
-    enum:
-      - "Oracle-Linux-7.8-2020.05.26-0"
+      - "7.9"
 
   igw_display_name:
     type: string
@@ -280,6 +515,29 @@ variables:
     enum:
       - "NO"
       - "YES"
+
+  mysql_shape_name:
+    type: enum
+    required: false
+    default: "MySQL.VM.Standard.E3.1.8GB"
+    title: "MySQL Database System Shape"
+    description: "Choose MySQL Database System Shape (MDS) for your deployment."
+    enum:
+      - "VM.Standard.E2.1"
+      - "VM.Standard.E2.2"
+      - "VM.Standard.E2.4"  
+      - "VM.Standard.E2.8"
+      - "MySQL.VM.Standard.E3.1.8GB"
+      - "MySQL.VM.Standard.E3.1.16GB"      
+      - "MySQL.VM.Standard.E3.2.32GB"
+      - "MySQL.VM.Standard.E3.4.64GB"
+      - "MySQL.VM.Standard.E3.8.128GB"
+      - "MySQL.VM.Standard.E3.16.256GB"
+      - "MySQL.VM.Standard.E3.24.384GB"
+      - "MySQL.VM.Standard.E3.32.512GB"
+      - "MySQL.VM.Standard.E3.48.768GB"    
+      - "MySQL.VM.Standard.E3.64.1024GB"  
+      - "MySQL.HeatWave.VM.Standard.E3" 
 
   mysql_db_system_data_storage_size_in_gb:
     type: number

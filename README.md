@@ -1,10 +1,8 @@
-# oci-arch-app-mds
+# oci-arch-spring-boot
+
+SpringBoot is an open source, Java-based framework that you can use to create production grade applications. SpringBoot simplifies the deployment of applications with minimal configuration and customization and includes third-party libraries to streamline the process.
 
 MySQL Database service is a managed Database service on Oracle Cloud Infrastructure. In this deployment we will deploy 3 node cluster(app server) along with a Load Balancer and MySQL Database service.
-
-These app servers can then be installed with an application such as mypetclinic (https://projects.spring.io/spring-petclinic/), and configured to work with MySQL.
-
-For more information please refer to https://github.com/spring-projects/spring-petclinic
 
 ## Terraform Provider for Oracle Cloud Infrastructure
 The OCI Terraform Provider is now available for automatic download through the Terraform Provider Registry. 
@@ -28,7 +26,7 @@ If you don't have the required permissions and quota, contact your tenancy admin
 
 ## Deploy Using Oracle Resource Manager
 
-1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://console.us-ashburn-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-arch-spring-boot/raw/main/Resource-Manager/oci-arch-spring-boot.zip)
+1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://console.us-ashburn-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-arch-spring-boot/releases/latest/download/oci-arch-spring-boot-stack-latest.zip)
 
 
 If you aren't already signed in, when prompted, enter the tenancy and user credentials.
@@ -53,8 +51,8 @@ If you aren't already signed in, when prompted, enter the tenancy and user crede
 
 You'll want a local copy of this repo. You can make that with the commands:
 
-    git clone https://github.com/oracle-quickstart/oci-arch-app-mds
-    cd oci-arch-app-mds
+    git clone https://github.com/oracle-quickstart/oci-arch-spring-boot
+    cd oci-arch-spring-boot
     ls
 
 You'll need to do some pre-deploy setup.  That's all detailed [here](https://github.com/cloud-partners/oci-prerequisites).
@@ -77,6 +75,8 @@ region = "us-ashburn-1"
 compartment_ocid = <"">    (Compartment without Security Zones enabled)
 compartment_SZ_ocid = <""> (Compartment with Security Zones enabled)
 
+mysql_db_system_admin_password = <"">
+
 ```
 
 NOTE: There are other variables that are assigned default value such as VCN CIDR and others. These can be changed in variables.tf file
@@ -88,12 +88,16 @@ Deploy:
     terraform apply
 
 
+### Testing your Deployment
+After the deployment is finished, you can test if your SpringBoot application has deployed correctly and can access picking up the value of the springboot_app_url:
 
-## Install Springboot
-To install Springboot follow the steps here;
-https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html
-Github Repo can also be accessed at ;
-https://github.com/spring-projects/spring-framework
+````
+springboot_app_url = http://150.230.171.250/api/v1/customer
+`````
+
+Then copy it into Web browser. Here is the example of the succesfull outcome:
+
+![](./images/springbootdemo.png)
 
 ## Destroy the Deployment 
 When you no longer need the deployment, you can run this command to destroy it:
