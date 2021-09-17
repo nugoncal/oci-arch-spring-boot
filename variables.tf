@@ -16,7 +16,6 @@ variable "ssh_public_key" {
 }
 
 variable "springboot_download_url" {
-  #  default = "https://objectstorage.us-ashburn-1.oraclecloud.com/p/xcQZ7geJpxVtHDVbSfeHMCeFWK83kHMK68O1lY6YIBaspWJhRA7sccHU_MrEJOVh/n/ociobenablement/b/java_deployments/o/ocispringbootdemo-0.0.1-SNAPSHOT.jar"
   default = "https://github.com/oracle-quickstart/oci-arch-spring-boot/releases/latest/download/ocispringbootdemo-0.0.1-SNAPSHOT.jar"
 }
 
