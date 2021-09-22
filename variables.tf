@@ -7,9 +7,9 @@ variable "compartment_ocid" {}
 variable "compartment_SZ_ocid" {
   default = ""
 }
-#variable "user_ocid" {}
-#variable "fingerprint" {}
-#variable "private_key_path" {}
+variable "user_ocid" {}
+variable "fingerprint" {}
+variable "private_key_path" {}
 
 variable "ssh_public_key" {
   default = ""
