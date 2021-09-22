@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Stop and disable firewalld 
-service firewalld stop
-systemctl disable firewalld
-
 # Install Java JDK and prepare for SpringBoot/Tomcat
 yum install -y java-1.8.0-openjdk
 setsebool -P tomcat_can_network_connect_db 1
@@ -37,4 +33,6 @@ sleep 20
 ps -ef | grep springboot
 systemctl status springboot --no-pager
 
-
+# Stop and disable firewalld 
+service firewalld stop
+systemctl disable firewalld

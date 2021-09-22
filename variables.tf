@@ -16,13 +16,12 @@ variable "ssh_public_key" {
 }
 
 variable "springboot_download_url" {
-  #  default = "https://objectstorage.us-ashburn-1.oraclecloud.com/p/xcQZ7geJpxVtHDVbSfeHMCeFWK83kHMK68O1lY6YIBaspWJhRA7sccHU_MrEJOVh/n/ociobenablement/b/java_deployments/o/ocispringbootdemo-0.0.1-SNAPSHOT.jar"
   default = "https://github.com/oracle-quickstart/oci-arch-spring-boot/releases/latest/download/ocispringbootdemo-0.0.1-SNAPSHOT.jar"
 }
 
 variable "release" {
   description = "Reference Architecture Release (OCI Architecture Center)"
-  default     = "1.0"
+  default     = "1.0.1"
 }
 
 variable "availablity_domain_name" {
@@ -302,7 +301,7 @@ variable "target_target_responder_recipes_responder_rules_details_mode" {
 }
 
 variable "cloud_guard_configuration_reporting_region" {
-  default = "us-ashburn-1"
+  default = ""
 }
 
 variable "responder_recipe1_description" {
