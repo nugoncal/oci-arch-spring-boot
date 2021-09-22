@@ -1,22 +1,17 @@
 ## Copyright © 2021, Oracle and/or its affiliates. 
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
-resource "oci_cloud_guard_cloud_guard_configuration" "vcn01_cloud_guard_configuration" {
-  count            = var.use_cloud_guard ? 1 : 0
-  compartment_id   = var.tenancy_ocid
-  reporting_region = var.region
-  status           = var.cloud_guard_configuration_status
-}
-
 resource "oci_cloud_guard_cloud_guard_configuration" "enable_cloud_guard" {
+  provider         = oci.homeregion
   count            = var.use_cloud_guard ? 1 : 0
   compartment_id   = var.tenancy_ocid
-  reporting_region = var.cloud_guard_configuration_reporting_region
+  reporting_region = var.cloud_guard_configuration_reporting_region == "" ? data.oci_identity_region_subscriptions.home_region_subscriptions.region_subscriptions[0].region_name : var.cloud_guard_configuration_reporting_region
   status           = var.cloud_guard_configuration_status
 }
 
 
 resource "oci_cloud_guard_detector_recipe" "cloned_detector_recipe" {
+  provider                  = oci.homeregion
   count                     = var.use_cloud_guard ? 1 : 0
   compartment_id            = var.compartment_ocid
   display_name              = var.detector_recipe1_display_name
@@ -25,6 +20,7 @@ resource "oci_cloud_guard_detector_recipe" "cloned_detector_recipe" {
 }
 
 resource "oci_cloud_guard_responder_recipe" "cloned_responder_recipe" {
+  provider                   = oci.homeregion
   count                      = var.use_cloud_guard ? 1 : 0
   compartment_id             = var.compartment_ocid
   description                = var.responder_recipe1_description
@@ -34,6 +30,7 @@ resource "oci_cloud_guard_responder_recipe" "cloned_responder_recipe" {
 
 }
 resource "oci_cloud_guard_detector_recipe" "cloned2_detector_recipe" {
+  provider                  = oci.homeregion
   count                     = var.use_cloud_guard ? 1 : 0
   compartment_id            = var.compartment_ocid
   display_name              = var.detector_recipe2_display_name
@@ -42,6 +39,7 @@ resource "oci_cloud_guard_detector_recipe" "cloned2_detector_recipe" {
 }
 
 resource "oci_cloud_guard_responder_recipe" "cloned2_responder_recipe" {
+  provider                   = oci.homeregion
   count                      = var.use_cloud_guard ? 1 : 0
   compartment_id             = var.compartment_ocid
   description                = var.responder_recipe2_description
@@ -52,6 +50,7 @@ resource "oci_cloud_guard_responder_recipe" "cloned2_responder_recipe" {
 
 
 resource "oci_cloud_guard_target" "test_target" {
+  provider           = oci.homeregion
   count              = var.use_cloud_guard ? 1 : 0
   compartment_id     = var.compartment_ocid
   display_name       = var.target1_display_name
@@ -73,6 +72,7 @@ resource "oci_cloud_guard_target" "test_target" {
 }
 
 resource "oci_cloud_guard_target" "test_target2" {
+  provider       = oci.homeregion
   count          = var.use_cloud_guard ? 1 : 0
   compartment_id = var.compartment_SZ_ocid
   display_name   = var.target2_display_name

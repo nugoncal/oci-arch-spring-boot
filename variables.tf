@@ -7,9 +7,9 @@ variable "compartment_ocid" {}
 variable "compartment_SZ_ocid" {
   default = ""
 }
-variable "user_ocid" {}
-variable "fingerprint" {}
-variable "private_key_path" {}
+#variable "user_ocid" {}
+#variable "fingerprint" {}
+#variable "private_key_path" {}
 
 variable "ssh_public_key" {
   default = ""
@@ -21,7 +21,7 @@ variable "springboot_download_url" {
 
 variable "release" {
   description = "Reference Architecture Release (OCI Architecture Center)"
-  default     = "1.0"
+  default     = "1.0.1"
 }
 
 variable "availablity_domain_name" {
@@ -301,7 +301,7 @@ variable "target_target_responder_recipes_responder_rules_details_mode" {
 }
 
 variable "cloud_guard_configuration_reporting_region" {
-  default = "us-ashburn-1"
+  default = ""
 }
 
 variable "responder_recipe1_description" {

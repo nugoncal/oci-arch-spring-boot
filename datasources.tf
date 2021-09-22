@@ -58,20 +58,23 @@ data "oci_cloud_guard_cloud_guard_configuration" "test_cloud_guard_configuration
 
 
 data "oci_cloud_guard_detector_recipes" "list_detector_recipes" {
-
+  provider       = oci.homeregion
   compartment_id = var.tenancy_ocid
   state          = var.detector_recipe_state
   display_name   = "OCI Configuration Detector Recipe"
 
   depends_on = [oci_cloud_guard_cloud_guard_configuration.enable_cloud_guard]
+  #depends_on = [oci_cloud_guard_cloud_guard_configuration.vcn01_cloud_guard_configuration]
 }
 
 data "oci_cloud_guard_responder_recipes" "list_responder_recipes" {
+  provider       = oci.homeregion
   compartment_id = var.tenancy_ocid
   state          = var.responder_recipe_state
   display_name   = "OCI Responder Recipe"
 
   depends_on = [oci_cloud_guard_cloud_guard_configuration.enable_cloud_guard]
+  #depends_on = [oci_cloud_guard_cloud_guard_configuration.vcn01_cloud_guard_configuration]
 }
 
 data "oci_cloud_guard_target" "test_target" {
